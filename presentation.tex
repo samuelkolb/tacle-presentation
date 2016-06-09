@@ -26,6 +26,7 @@
 \usepackage{algpseudocode}
 \usepackage{tabularx}
 \usepackage{fixltx2e}
+\usepackage{algorithm}
 
 
 
@@ -327,10 +328,47 @@
 \end{frame}
 
 
+\newcommand{\temps}{\ensuremath{S}}
+
 \begin{frame}[fragile]
-\frametitle{\ftapproach}
-text
+\frametitle{\ftapproach : Two Step Algorithm}
+\begin{algorithm}[H]
+  \begin{algorithmic}[1]
+    \footnotesize
+    \State \textbf{Input:} $\temps$ -- constraint templates, $\blocks$ -- maximal blocks
+    \State \textbf{Output:} $C$ -- learned constraints
+
+    \Procedure{LearnConstraints}{$\blocks$, $\temps$}
+      \State $C \gets \emptyset$ %\Comment{The set of constraints}
+      \ForAll{$s~\mathbf{in}~\temps$} \label{algo:tcl:for}
+        %\State $n \gets$ number of arguments of template $s$
+        \State $A \gets \generategroups(s, \blocks)$  \label{algo:tcl:super}
+        \ForAll{$(B_1, \dots, B_n) \in A$}
+        \State{$A' \gets \findassignment(s, (B_1,\dots,B_n))$}
+        \ForAll{$(B_1',\dots,B_n') \in A'$}
+            \State $C \gets C \cup \{ c_s(B_1', \dots, B_n') \}$
+          \EndFor
+        \EndFor
+      \EndFor
+      \State \Return $C$
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
 \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Intuition behind the algorithm}
+Example: 
+    \begin{verbatim}
+    Y = SUM(X, col)
+    \end{verbatim}
+\begin{itemize}\setlength{\itemsep}{+10mm}
+  \item Step 1: Find suitable blocks for the constraint, e.g. both $X$ and $Y$ must be numeric and ``large enough'' (if you sum over  $k$ columns in $X$, then the length of vectors in $Y$ is larger than $k$)
+  \item Step 2: Find suitable subblocks of the right size: if $X$ is $n \times k$, then $Y$ is $k \times 1$ and check that sum-column constraint holds over them
+\end{itemize}
+\end{frame}
+
+
 
 \begin{frame}[fragile]
 \frametitle{\ftevaluation}
