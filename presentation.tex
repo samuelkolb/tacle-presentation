@@ -23,6 +23,8 @@
 \usepackage{subfigure}
 \usepackage[labelformat=empty]{caption}
 \usepackage{algpseudocode}
+\usepackage{tabularx}
+
 
 
 \usetikzlibrary{matrix,arrows,decorations.pathmorphing}
@@ -37,6 +39,72 @@
 \newcommand{\inp}{\texttt{in}\xspace}
 \newcommand{\dbp}{\texttt{db}\xspace}
 \newcommand{\shapep}{\texttt{shape}\xspace}
+
+\newcommand{\PADSEP}{0pt}
+
+\newcommand{\constraints}{\ensuremath{\mathcal{T}}\xspace}
+\newcommand{\format}[1]{\textit{#1}\xspace}
+\newcommand{\generategroups}{\format{SuperblockAssignments}}
+\newcommand{\extractgroups}{\format{extractGroups}}
+\newcommand{\extracttables}{\format{extractTables}}
+\newcommand{\learnconstraints}{\format{LearnConstraints}}
+\newcommand{\findassignment}{\format{Subassignments}}
+\newcommand{\postprocess}{\format{pruneRedundant}}
+\newcommand{\constrainttorder}{\format{templateOrder}}
+\newcommand{\template}{\format{constraint template}}
+\newcommand{\sname}{\format{TaCLe}}
+
+
+\newcommand{\CName}{Syntax\xspace}
+\newcommand{\CSignature}{Signature\xspace}
+\newcommand{\CFunction}{Definition\xspace}
+\newcommand{\dependencies}{\ensuremath{\mathcal{D}}\xspace}
+\newcommand{\groups}{\ensuremath{\mathcal{B}}\xspace}
+\newcommand{\blocks}{\ensuremath{\mathcal{B}}\xspace}
+
+\newcommand{\range}[3]{\ensuremath{#1[#2,#3]}}
+\newcommand{\rangeto}[2]{#1{:}#2}
+\newcommand{\rangeall}{:}
+
+\newcommand{\eccalc}[2]{\ensuremath{#1 = #2}}
+\newcommand{\ecrank}[2]{\eccalc{#1}{\textit{RANK}(#2)}}
+\newcommand{\ecfkey}[2]{\ensuremath{\textit{FOREIGNKEY}(#1,#2)}}
+\newcommand{\ecalldiff}[1]{\ensuremath{\textit{ALLDIFFERENT}(#1)}}
+\newcommand{\eclookupf}[4]{\ensuremath{\textit{LOOKUP}_{\textit{#4}}(#1, #2, #3)}}
+\newcommand{\eclookup}[4]{\eccalc{#1}{\eclookupf{#2}{#3}{#4}{}}}
+\newcommand{\eclookupprod}[5]{\eccalc{#1}{#2 \times \eclookupf{#3}{#4}{#5}{}}}
+\newcommand{\eclookupfuzzy}[4]{\eccalc{#1}{\eclookupf{#2}{#3}{#4}{fuzzy}}}
+\newcommand{\ecperm}[1]{\ensuremath{\textit{PERMUTATION}(#1)}}
+\newcommand{\ecseries}[1]{\ensuremath{\textit{SERIES}(#1)}}
+\newcommand{\ecprod}[3]{\eccalc{#1}{#2 \times #3}}
+\newcommand{\ecdiv}[3]{\eccalc{#1}{{#2} / {#3}}}
+\newcommand{\ecdiff}[3]{\eccalc{#1}{#2 - #3}}
+\newcommand{\ectotal}[3]{\eccalc{#1}{\textit{PREV}(#1) + #2 - #3}}
+\newcommand{\ecproj}[2]{\eccalc{#1}{\textit{PROJECT}(#2)}}
+\newcommand{\ecaggc}[3]{\eccalc{#2}{\textit{#1\textsubscript{col}}(#3)}}
+\newcommand{\ecaggr}[3]{\eccalc{#2}{\textit{#1\textsubscript{row}}(#3)}}
+\newcommand{\ecsumc}[2]{\eccalc{#1}{\textit{SUM\textsubscript{col}}(#2)}}
+\newcommand{\ecsumr}[2]{\eccalc{#1}{\textit{SUM\textsubscript{row}}(#2)}}
+\newcommand{\ecaggif}[5]{\eccalc{#2}{\textit{#1IF}(#3, #4, #5)}}
+\newcommand{\ecsumif}[4]{\eccalc{#1}{\textit{SUMIF}(#2, #3, #4)}}
+\newcommand{\ecsumprod}[3]{\eccalc{#1}{\textit{SUMPRODUCT}(#2, #3)}}
+
+\newcommand{\numeric}{\format{numeric}}
+\newcommand{\textual}{\format{textual}}
+\newcommand{\integer}{\format{integer}}
+\newcommand{\discrete}{\format{discrete}}
+\newcommand{\plength}{\format{length}}
+\newcommand{\psize}{\format{size}}
+\newcommand{\ptype}{\format{type}}
+\newcommand{\ptable}{\format{table}}
+\newcommand{\por}{\format{orientation}}
+\newcommand{\prows}{\format{rows}}
+\newcommand{\pcols}{\format{columns}}
+\newcommand{\nat}{\mathcal{N}}
+
+\newcommand{\sg}{B}
+\newcommand{\sbl}[1]{\ensuremath{B_{\textit{#1}}}}
+\newcommand{\bsbl}[1]{\ensuremath{\mathbf{B_{\textit{#1}}}}}
 
 
 
@@ -74,18 +142,24 @@
     \topline
 }
 
-
-\title{Title}
+\title{\sname}
 \setbeamerfont{author}{shape=\itshape,family=\rmfamily}
 \setbeamercolor{title}{fg=titleColor}
 \setbeamercolor{frametitle}{fg=titleColor}
+\setbeamercolor{frametitle}{fg=titleColor}
 \setbeamercolor{example}{fg=otherColor}
-\subtitle{Subtitle}
+
+\subtitle{Learning constraints in spreadsheets and tabular data}
 %\author{Luc De Raedt, \underline{Sergey Paramonov}, Matthijs van Leeuwen}
 \author{Sergey Paramonov}
 \institute{KU Leuven}
 \date{\today}
 \newtheorem{opr}{Definition}[section]
+
+\newcommand{\ftmotivation}{Motivation}
+\newcommand{\ftintro}{Formalization}
+\newcommand{\ftapproach}{Approach}
+\newcommand{\ftevaluation}{Evaluation}
 \begin{document}
 
 \begin{frame}
@@ -93,6 +167,123 @@
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{\ftmotivation}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Key Elements}
+    \begin{itemize}
+      \item<1-> Tables ($T$)
+      \begin{itemize}
+        \item $n \times m$ matrix
+        \item Headerless
+        \item Optional orientation
+      \end{itemize}
+      \item<2-> Blocks ($B$)
+      \begin{itemize}
+        \item Entire rows or entire columns (vectors)
+        \item Fixed orientation
+        \item Contiguous
+        \item Type-consistent
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Example}
+    \begin{figure}
+      \centering
+      \includegraphics[width=1\textwidth]{Demo2.png}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Block containment}
+  \begin{itemize}
+    \item $B' \sqsubseteq B$
+    \begin{itemize}
+      \item $B'$ subblock of $B$
+      \item $B$ superblock of $B'$
+    \end{itemize}
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Example}
+    \begin{figure}
+      \centering
+      \includegraphics[width=1\textwidth]{Demo2.png}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+
+\newcommand{\sigc}{\ensuremath{\format{Sig}_s}}
+\newcommand{\defc}{\ensuremath{\format{Def}_s}}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Constraint templates}
+    \begin{itemize}
+      \item Syntax
+      \begin{itemize}
+        \item Syntactic form, e.g. $\ecalldiff{\sg_x}$
+        \item In logic: relation / predicate
+      \end{itemize}
+      \item Signature
+        \begin{itemize}
+          \item Requirements on arguments, e.g. $\discrete(\sg_x)$
+          \item In logic: bias ($\sigc$)
+        \end{itemize}
+      \item Definition
+        \begin{itemize}
+          \item Actual definition, e.g. $i \neq j$: $\sg_x[i] \neq \sg_x[j]$
+          \item In logic: ackground knowledge ($\defc$)
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftintro}
+  \begin{block}{Lookup}<1->
+    \begin{itemize}
+      \item Syntax: \eclookup{\sbl{r}}{\sbl{fk}}{\sbl{pk}}{\sbl{val}}
+      \item Signature: $\sbl{fk}$ and $\sbl{pk}$ are $\discrete$; arguments $\{\sbl{fk}, \sbl{r}\}$ and $\{\sbl{pk}, \sbl{val}\}$ within the same set have the same \plength, \ptable and \por; $\sbl{r}$ and~$\sbl{val}$ have the same type; and \ecfkey{\sbl{fk}}{\sbl{pk}}.
+      \item Definition: $\sbl{r}[i] = \sbl{val}[j]$ where $\sbl{pk}[j] = \sbl{fk}[i]$
+    \end{itemize}
+  \end{block}
+  \begin{block}{Row-wise sum}<2->
+    \begin{itemize}
+      \item Syntax: $\ecsumr{\sg_r}{\mathbf{\sg_x}}$
+      \item Signature: $\sg_r$ and $\mathbf{\sg_x}$ are $\numeric$; $\pcols(\mathbf{\sg_x}) \geq 2$; and $\prows(\mathbf{\sg_x}) = \plength(\sg_r)$
+      \item Definition: $B_r[i] = \sum_{j = 1}^{\pcols(\bsbl{x})} \mathit{row}(i, \bsbl{x})[j]$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftapproach}
 text
 \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+text
+\end{frame}
+
 \end{document}
