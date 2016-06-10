@@ -30,6 +30,9 @@
 *.fdb_latexmk
 *.fls
 /*.pdf
+*.vrb
+*.snm
+*.nav
 
 # Mac IDE files
 *.swp
