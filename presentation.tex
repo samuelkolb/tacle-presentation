@@ -362,18 +362,43 @@
 \frametitle{\ftapproach}
 \begin{block}{Intuition}
   \begin{itemize}
-    \setlength{\itemsep}{+10mm}
+    \setlength{\itemsep}{+5mm}
     \item Example: $\ecsumc{Y}{X}$
-    \item Step 1: Find superblock assignments (i.e. suitable blocks for the constraint)
+    \item Step 1: Find superblock assignments (i.e. suitable blocks)
     \begin{itemize}
-      \item ``Translate'' signature, relax where necessary
+      \item Assignments \textit{compatible} signature, relax where necessary
       \item e.g. $\numeric(X)$, $\numeric(Y)$, $\pcols(X) \geq 2$
       \item e.g. $\prows(X) = \plength(Y)$
     \end{itemize}
-    \item Step 2: Find suitable subblocks of the right size: if $X$ is $n \times k$, then $Y$ is $k \times 1$ and check that sum-column constraint holds over them
+    \item Step 2: Find all constraints over subblocks of the superblock assignments
+    \begin{itemize}
+      \item Find \textit{subassignments} that satisfy the signature and the definition
+      \item e.g. find subblocks for $X$ and $Y$ such that $Y[i] = \sum \mathit{column~i}$
+    \end{itemize}
   \end{itemize}
 \end{block}
 
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\ftapproach}
+  \begin{block}{Illustration}
+    \begin{figure}
+      \centering
+      \includegraphics[width=1\textwidth]{Demo2.png}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\ftapproach}
+  \begin{block}{Dependencies}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.7\textwidth]{dependencies.pdf}
+    \end{figure}
+  \end{block}
 \end{frame}
 
 
@@ -432,48 +457,48 @@
 
 \begin{frame}[fragile]
 \frametitle{\ftevaluation}
-\begin{block}{Case study}
-  {\tiny
-    \begin{align*}
-      % Table 1
-      &~\ecseries{\range{T_{1}}{\rangeall}{1}} \\
-%
-%      &~\ecperm{\range{T_{1}}{\rangeall}{1}}, \ecperm{\range{T_{1}}{\rangeall}{8}} \\
-%
-      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{5}}^*\\
-      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{6}}^* \\
-      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{10}}^*\\
-      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{7}} \\
-      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{3}}^*\\
-      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{4}}^* \\
-%
-      &~\ecsumr{\range{T_{1}}{\rangeall}{7}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
-%
-      &~\ecaggif{\textit{SUM}}{\range{T_{1}}{\rangeall}{10}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
-%
-      &~\ecaggif{\textit{MAX}}{\range{T_{1}}{\rangeall}{11}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
-%
-    % Table 2
-      &~\ecsumc{\range{T_{2}}{1}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
-%
-      &~\ecaggc{\textit{AVERAGE}}{\range{T_{2}}{2}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
-%
-      &~\ecaggc{\textit{MAX}}{\range{T_{2}}{3}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}},  \\
-%
-      &~\ecaggc{\textit{MIN}}{\range{T_{2}}{4}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
-%
-    % Table 4
-      &~\ecsumc{\range{T_{4}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
-%
-      &~\range{T_{4}}{\rangeall}{4} = PREV(\range{T_{4}}{\rangeall}{4}) + \range{T_{4}}{\rangeall}{2} - \range{T_{4}}{\rangeall}{3} \\
-%
-    % Table 5
-      &~\eclookup{\range{T_{5}}{\rangeall}{2}}{\range{T_{5}}{\rangeall}{3}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}^* \\
-%
-      &~\eclookup{\range{T_{5}}{\rangeall}{3}}{\range{T_{5}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}
-    \end{align*}}
+  \begin{block}{Case study}
+    {\tiny
+      \begin{align*}
+        % Table 1
+        &~\ecseries{\range{T_{1}}{\rangeall}{1}} \\
+  %
+  %      &~\ecperm{\range{T_{1}}{\rangeall}{1}}, \ecperm{\range{T_{1}}{\rangeall}{8}} \\
+  %
+        &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{5}}^*\\
+        &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{6}}^* \\
+        &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{10}}^*\\
+        &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{7}} \\
+        &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{3}}^*\\
+        &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{4}}^* \\
+  %
+        &~\ecsumr{\range{T_{1}}{\rangeall}{7}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
+  %
+        &~\ecaggif{\textit{SUM}}{\range{T_{1}}{\rangeall}{10}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
+  %
+        &~\ecaggif{\textit{MAX}}{\range{T_{1}}{\rangeall}{11}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
+  %
+      % Table 2
+        &~\ecsumc{\range{T_{2}}{1}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+  %
+        &~\ecaggc{\textit{AVERAGE}}{\range{T_{2}}{2}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+  %
+        &~\ecaggc{\textit{MAX}}{\range{T_{2}}{3}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}},  \\
+  %
+        &~\ecaggc{\textit{MIN}}{\range{T_{2}}{4}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+  %
+      % Table 4
+        &~\ecsumc{\range{T_{4}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
+  %
+        &~\range{T_{4}}{\rangeall}{4} = PREV(\range{T_{4}}{\rangeall}{4}) + \range{T_{4}}{\rangeall}{2} - \range{T_{4}}{\rangeall}{3} \\
+  %
+      % Table 5
+        &~\eclookup{\range{T_{5}}{\rangeall}{2}}{\range{T_{5}}{\rangeall}{3}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}^* \\
+  %
+        &~\eclookup{\range{T_{5}}{\rangeall}{3}}{\range{T_{5}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}
+      \end{align*}}
 
-\end{block}
+  \end{block}
 \end{frame}
 
 
