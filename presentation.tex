@@ -28,7 +28,7 @@
 \usepackage{fixltx2e}
 \usepackage{algorithm}
 
-\graphicspath{{figures}}
+\graphicspath{{figures/}}
 
 \usetikzlibrary{matrix,arrows,decorations.pathmorphing}
 \usetikzlibrary{positioning}
@@ -331,8 +331,9 @@
 \newcommand{\temps}{\ensuremath{S}}
 
 \begin{frame}[fragile]
-\frametitle{\ftapproach : Two Step Algorithm}
-\begin{algorithm}[H]
+\frametitle{\ftapproach}
+\begin{block}{High level algorithm}
+  \begin{algorithm}[H]
   \begin{algorithmic}[1]
     \footnotesize
     \State \textbf{Input:} $\temps$ -- constraint templates, $\blocks$ -- maximal blocks
@@ -354,18 +355,25 @@
     \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Intuition behind the algorithm}
-Example:
-    \begin{verbatim}
-    Y = SUM(X, col)
-    \end{verbatim}
-\begin{itemize}\setlength{\itemsep}{+10mm}
-  \item Step 1: Find suitable blocks for the constraint, e.g. both $X$ and $Y$ must be numeric and ``large enough'' (if you sum over  $k$ columns in $X$, then the length of vectors in $Y$ is larger than $k$)
-  \item Step 2: Find suitable subblocks of the right size: if $X$ is $n \times k$, then $Y$ is $k \times 1$ and check that sum-column constraint holds over them
-\end{itemize}
+\frametitle{\ftapproach}
+\begin{block}{Intuition}
+  \begin{itemize}
+    \setlength{\itemsep}{+10mm}
+    \item Example: $\ecsumc{Y}{X}$
+    \item Step 1: Find superblock assignments (i.e. suitable blocks for the constraint)
+    \begin{itemize}
+      \item ``Translate'' signature, relax where necessary
+      \item e.g. $\numeric(X)$, $\numeric(Y)$, $\pcols(X) \geq 2$
+      \item e.g. $\prows(X) = \plength(Y)$
+    \end{itemize}
+    \item Step 2: Find suitable subblocks of the right size: if $X$ is $n \times k$, then $Y$ is $k \times 1$ and check that sum-column constraint holds over them
+  \end{itemize}
+\end{block}
+
 \end{frame}
 
 
@@ -496,7 +504,7 @@ Example:
         & Overall & Sheet avg & Overall & Sheet avg & Overall & Sheet avg \\ \hline
         \textbf{Tables} & 19 & 2.11 & 48 & 2.29 & 4 & 1 \\ \hline
         \textbf{Cells} & 1231 & 137 & 1889 & 90 & 2320 & 580 \\ \hline
-        \textbf{\begin{tabular}[c]{@{}l@{}}Relevant\\[-4pt] Constraints\end{tabular}} & 34 & 3.78 & 52 & 2.48 & 6 & 1.50
+        \textbf{\begin{tabular}[c]{@{}l@{}}Intended\\[-4pt] Constraints\end{tabular}} & 34 & 3.78 & 52 & 2.48 & 6 & 1.50
       \end{tabularx}
     \end{table}
   }
