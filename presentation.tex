@@ -21,9 +21,12 @@
 \usepackage{rotating}    % for sideways tables/figures
 \usepackage{xspace}
 \usepackage{subfigure}
+\usepackage{xmpmulti}
 \usepackage[labelformat=empty]{caption}
 \usepackage{algpseudocode}
 \usepackage{tabularx}
+\usepackage{fixltx2e}
+\usepackage{algorithm}
 
 
 
@@ -151,7 +154,7 @@
 
 \subtitle{Learning constraints in spreadsheets and tabular data}
 %\author{Luc De Raedt, \underline{Sergey Paramonov}, Matthijs van Leeuwen}
-\author{Sergey Paramonov}
+\author{Sergey Paramonov, Samuel Kolb, Tias Guns, Luc De Raedt}
 \institute{KU Leuven}
 \date{\today}
 \newtheorem{opr}{Definition}[section]
@@ -167,8 +170,57 @@
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{\ftmotivation}
+\frametitle{\ftmotivation: Flash-fill}
+%\transduration<0-15>{0}
+    \multiinclude[<+->][format=png, graphics={width=\textwidth}]{frames/frame}
 \end{frame}
+
+\begin{frame}
+  \frametitle{What is Flash-fill?}
+\begin{itemize} \setlength{\itemsep}{+6mm}
+    \item learns string transformation
+    \item classic ML supervised setting
+    \item one positive (or very few) example
+    \item integrated into Excel
+  \end{itemize}
+  \vspace{10pt}
+
+
+  {\Large \textbf{Key Question:} what if we make it unsupervised?}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Can we recover formulas from a CSV file?}
+  \includegraphics[width=\linewidth]{csv.png}
+
+  \begin{itemize}[<+->]
+    \item What are the formulas here?
+    \item \begin{verbatim} T1[:, 6] = SUM(T1[:, 3:5], row) \end{verbatim}
+  \item  \begin{verbatim} T2[:, 2] = SUMIF(T1[:, 1]=T2[:, 1], T1[:, 6]) \end{verbatim}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is new here?}
+\begin{itemize} \setlength{\itemsep}{+6mm}
+    \item Not typical data settings: no variables in columns and transactions in rows -- everything mixed
+    \item Multi-relational learning (like sumif or lookup across multiple tables)
+    \item Spreadsheet specific constraints -- fuzzy lookup or sumproduct
+    \item Plenty of surprises: Nones, semi-structured data, numeric and textual
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Demo!}
+  Demo comes here
+\end{frame}
+
+
+
+
+
+
 
 
 \begin{frame}[fragile]
@@ -276,9 +328,44 @@
 \end{frame}
 
 
+\newcommand{\temps}{\ensuremath{S}}
+
 \begin{frame}[fragile]
-\frametitle{\ftapproach}
-text
+\frametitle{\ftapproach : Two Step Algorithm}
+\begin{algorithm}[H]
+  \begin{algorithmic}[1]
+    \footnotesize
+    \State \textbf{Input:} $\temps$ -- constraint templates, $\blocks$ -- maximal blocks
+    \State \textbf{Output:} $C$ -- learned constraints
+
+    \Procedure{LearnConstraints}{$\blocks$, $\temps$}
+      \State $C \gets \emptyset$ %\Comment{The set of constraints}
+      \ForAll{$s~\mathbf{in}~\temps$} \label{algo:tcl:for}
+        %\State $n \gets$ number of arguments of template $s$
+        \State $A \gets \generategroups(s, \blocks)$  \label{algo:tcl:super}
+        \ForAll{$(B_1, \dots, B_n) \in A$}
+        \State{$A' \gets \findassignment(s, (B_1,\dots,B_n))$}
+        \ForAll{$(B_1',\dots,B_n') \in A'$}
+            \State $C \gets C \cup \{ c_s(B_1', \dots, B_n') \}$
+          \EndFor
+        \EndFor
+      \EndFor
+      \State \Return $C$
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Intuition behind the algorithm}
+Example:
+    \begin{verbatim}
+    Y = SUM(X, col)
+    \end{verbatim}
+\begin{itemize}\setlength{\itemsep}{+10mm}
+  \item Step 1: Find suitable blocks for the constraint, e.g. both $X$ and $Y$ must be numeric and ``large enough'' (if you sum over  $k$ columns in $X$, then the length of vectors in $Y$ is larger than $k$)
+  \item Step 2: Find suitable subblocks of the right size: if $X$ is $n \times k$, then $Y$ is $k \times 1$ and check that sum-column constraint holds over them
+\end{itemize}
 \end{frame}
 
 
@@ -398,7 +485,7 @@ text
 \begin{frame}[fragile]
 \frametitle{\ftevaluation}
 \begin{block}{Benchmark}
-  
+
 \end{block}
 \end{frame}
 
@@ -413,6 +500,5 @@ text
   \end{itemize}
 \end{block}
 \end{frame}
-
 
 \end{document}
