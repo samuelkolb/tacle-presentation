@@ -28,7 +28,7 @@
 \usepackage{fixltx2e}
 \usepackage{algorithm}
 
-
+\graphicspath{{figures}}
 
 \usetikzlibrary{matrix,arrows,decorations.pathmorphing}
 \usetikzlibrary{positioning}
@@ -506,37 +506,37 @@ Example:
 
 \begin{frame}[fragile]
 \frametitle{\ftevaluation}
-\begin{block}{Benchmark}
-  {\small\setlength{\tabcolsep}{0.33em}
-    \begin{table}[]
-      \centering
-      \label{tbl:category_overview}
-      \begin{tabularx}{\linewidth}{lccccccc}
-        & \multicolumn{2}{c}{\textbf{Exercises} (9)} & \multicolumn{2}{c}{\textbf{Tutorials} (21)} & \multicolumn{2}{c}{\textbf{Data} (4)} \\
-        & Overall & Sheet avg & Overall & Sheet avg & Overall & Sheet avg \\ \hline
-        \textbf{Recall} & 0.85 & 0.83 & 0.88 & 0.87 & 1.00 & 1.00 \\ \hline
-        \textbf{\begin{tabular}[c]{@{}l@{}}Recall\\[-4pt] Supported\end{tabular}} & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\ \hline
-        \textbf{Precision} & 0.97 & 0.98 & 0.70 & 0.91 & 1.00 & 1.00 \\ \hline
-        \textbf{Speed (s)} & 1.62 & 0.18 & 1.76 & 0.08 & 0.81 & 0.20
-      \end{tabularx}
-    \end{table}
-  }
-  \pause
-  \begin{itemize}
-  \item<1-> Q1. How many intended constraints are found by \sname?
-  \begin{itemize}
-    \item High recall
-    \item All supported constraints always found  \end{itemize}
-  \item<2-> Q2. How precise is \sname?
-  \begin{itemize}
-    \item Precise on most spreadsheets
-    \item Duplicates / multiple ways to calculate thwart precision
-  \end{itemize}
-  \item<3-> Q3. How fast is \sname?
-  \begin{itemize}
-    \item Dependencies crucial
-  \end{itemize}
-\end{itemize}
+  \begin{block}{Benchmark}
+    {\small\setlength{\tabcolsep}{0.33em}
+      \begin{table}[]
+        \centering
+        \label{tbl:category_overview}
+        \begin{tabularx}{\linewidth}{lccccccc}
+          & \multicolumn{2}{c}{\textbf{Exercises} (9)} & \multicolumn{2}{c}{\textbf{Tutorials} (21)} & \multicolumn{2}{c}{\textbf{Data} (4)} \\
+          & Overall & Sheet avg & Overall & Sheet avg & Overall & Sheet avg \\ \hline
+          \textbf{Recall} & 0.85 & 0.83 & 0.88 & 0.87 & 1.00 & 1.00 \\ \hline
+          \textbf{\begin{tabular}[c]{@{}l@{}}Recall\\[-4pt] Supported\end{tabular}} & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\ \hline
+          \textbf{Precision} & 0.97 & 0.98 & 0.70 & 0.91 & 1.00 & 1.00 \\ \hline
+          \textbf{Speed (s)} & 1.62 & 0.18 & 1.76 & 0.08 & 0.81 & 0.20
+        \end{tabularx}
+      \end{table}
+    }
+    \pause
+    \begin{itemize}
+      \item<+-> Q1. How many intended constraints are found by \sname?
+      \begin{itemize}
+        \item High recall
+        \item All supported constraints always found  \end{itemize}
+      \item<+-> Q2. How precise is \sname?
+      \begin{itemize}
+        \item Precise on most spreadsheets
+        \item Duplicates / multiple ways to calculate thwart precision
+      \end{itemize}
+      \item<+-> Q3. How fast is \sname?
+      \begin{itemize}
+        \item Dependencies crucial
+      \end{itemize}
+    \end{itemize}
   \end{block}
 \end{frame}
 
@@ -553,23 +553,23 @@ Example:
 
 
 \begin{frame}[fragile]
-\frametitle{\ftevaluation}
-\begin{block}{Testing the limits}
-  \begin{itemize}
-    \item<1-> ``exps\_tias''
+  \frametitle{\ftevaluation}
+  \begin{block}{Testing the limits}
     \begin{itemize}
-      \item 6 tables
-      \item 531 cells
-      \item Many duplicate columns across tables
+      \item<1-> ``exps\_tias''
+      \begin{itemize}
+        \item 6 tables
+        \item 531 cells
+        \item Many duplicate columns across tables
+      \end{itemize}
+      \item<2-> Q1 Recall: $1.0$
+      \item<3-> Q2 Precision: $0.52 / 0.11$ (with / without equalities)
+      \begin{itemize}
+        \item Post-processing step (entailment / heuristic)
+      \end{itemize}
+      \item<4-> Q3 Speed: $14.30s$
     \end{itemize}
-    \item<2-> Q1 Recall: $1.0$
-    \item<3-> Q2 Precision: $0.52 / 0.11$ (with / without equalities)
-    \begin{itemize}
-      \item Post-processing step (entailment / heuristic)
-    \end{itemize}
-    \item<4-> Q3 Speed: $14.30s$
-  \end{itemize}
-\end{block}
+  \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -585,7 +585,7 @@ Example:
 
 
 \begin{frame}[fragile]
-  \frametitle{Applications}
+  \frametitle{Conclusion}
   \begin{block}{Conclusion}
     \begin{itemize}
       \item<+-> Approach that learns constraints in spreadsheet
@@ -606,5 +606,17 @@ Example:
     \end{itemize}
   \end{block}
 \end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Conclusion}
+  \begin{block}{Questions?}
+    \begin{figure}[t]
+      \centering
+      \includegraphics[width=1\linewidth]{4kittens.jpg}
+  \end{figure}
+  \end{block}
+\end{frame}
+
 
 \end{document}
