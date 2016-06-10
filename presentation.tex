@@ -281,9 +281,138 @@
 text
 \end{frame}
 
+
 \begin{frame}[fragile]
 \frametitle{\ftevaluation}
-text
+\begin{block}{Evaluation questions}
+  \begin{itemize}
+    \item Recall (\textit{Q1})
+    \item Precision (\textit{Q2})
+    \item Speed (\textit{Q3})
+  \end{itemize}
+\end{block}
+\pause
+\begin{block}{Structure}
+  \begin{itemize}
+    \item Method
+    \item Case study
+    \item Benchmark
+    \item Testing the limits
+  \end{itemize}
+\end{block}
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+\begin{block}{Method}
+  \begin{itemize}
+    \item<1-> Benchmark spreadsheets collected
+    \begin{itemize}
+      \item Exercise session
+      \item Online tutorials
+      \item \textit{Data} spreadsheets (e.g. crime statistics, fincancial data)
+    \end{itemize}
+    \item<2-> Convert all spreadsheets to CSV files
+    \item<3-> Manually specify ground-truth: \textit{intended} constraints
+    \begin{itemize}
+      \item Based on original formulas, context, headers (intuition)
+      \item Structural constraints are ignored
+    \end{itemize}
+  \end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+\begin{block}{Case study}
+  {\footnotesize
+    \begin{align*}
+      % Table 1
+      &~\ecseries{\range{T_{1}}{\rangeall}{1}} \\
+%
+%      &~\ecperm{\range{T_{1}}{\rangeall}{1}}, \ecperm{\range{T_{1}}{\rangeall}{8}} \\
+%
+      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{5}}^*\\
+      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{6}}^* \\
+      &~\ecrank{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{10}}^*\\
+      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{7}} \\
+      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{3}}^*\\
+      &~\ecrank{\range{T_{1}}{\rangeall}{8}}{\range{T_{1}}{\rangeall}{4}}^* \\
+%
+      &~\ecsumr{\range{T_{1}}{\rangeall}{7}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
+%
+      &~\ecaggif{\textit{SUM}}{\range{T_{1}}{\rangeall}{10}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
+%
+      &~\ecaggif{\textit{MAX}}{\range{T_{1}}{\rangeall}{11}}{\range{T_{3}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{3}}{\rangeall}{2}} \\
+%
+    % Table 2
+      &~\ecsumc{\range{T_{2}}{1}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+%
+      &~\ecaggc{\textit{AVERAGE}}{\range{T_{2}}{2}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+%
+      &~\ecaggc{\textit{MAX}}{\range{T_{2}}{3}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}},  \\
+%
+      &~\ecaggc{\textit{MIN}}{\range{T_{2}}{4}{\rangeall}}{\range{T_{1}}{\rangeall}{\rangeto{3}{7}}} \\
+%
+    % Table 4
+      &~\ecsumc{\range{T_{4}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{\rangeto{3}{6}}} \\
+%
+      &~\range{T_{4}}{\rangeall}{4} = PREV(\range{T_{4}}{\rangeall}{4}) + \range{T_{4}}{\rangeall}{2} - \range{T_{4}}{\rangeall}{3} \\
+%
+    % Table 5
+      &~\eclookup{\range{T_{5}}{\rangeall}{2}}{\range{T_{5}}{\rangeall}{3}}{\range{T_{1}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}^* \\
+%
+      &~\eclookup{\range{T_{5}}{\rangeall}{3}}{\range{T_{5}}{\rangeall}{2}}{\range{T_{1}}{\rangeall}{1}}{\range{T_{1}}{\rangeall}{2}}
+    \end{align*}}
+
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+\begin{block}{Benchmark}
+  {\small\setlength{\tabcolsep}{0.33em}
+    \begin{table}[]
+      \centering
+      \label{tbl:category_overview}
+      \begin{tabularx}{\linewidth}{lccccccc}
+        & \multicolumn{2}{c}{\textbf{Exercises} (9)} & \multicolumn{2}{c}{\textbf{Tutorials} (21)} & \multicolumn{2}{c}{\textbf{Data} (4)} \\
+        & Overall & Sheet avg & Overall & Sheet avg & Overall & Sheet avg \\ \hline
+        \textbf{Tables} & 19 & 2.11 & 48 & 2.29 & 4 & 1 \\ \hline
+        \textbf{Cells} & 1231 & 137 & 1889 & 90 & 2320 & 580 \\ \hline
+        \textbf{\begin{tabular}[c]{@{}l@{}}Relevant\\[-4pt] Constraints\end{tabular}} & 34 & 3.78 & 52 & 2.48 & 6 & 1.50 \\ \hline \hline
+        \textbf{Recall} & 0.85 & 0.83 & 0.88 & 0.87 & 1.00 & 1.00 \\ \hline
+        \textbf{\begin{tabular}[c]{@{}l@{}}Recall\\[-4pt] Supported\end{tabular}} & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\ \hline
+        \textbf{Precision} & 0.97 & 0.98 & 0.70 & 0.91 & 1.00 & 1.00 \\ \hline
+        \textbf{Speed (s)} & 1.62 & 0.18 & 1.76 & 0.08 & 0.81 & 0.20
+      \end{tabularx}
+    \end{table}
+  }
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+\begin{block}{Benchmark}
+  
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ftevaluation}
+\begin{block}{Testing the limits}
+  \begin{itemize}
+    \item Recall (\textit{Q1})
+    \item Precision (\textit{Q2})
+    \item Speed (\textit{Q3})
+  \end{itemize}
+\end{block}
+\end{frame}
+
 
 \end{document}
